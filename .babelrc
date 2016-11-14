@@ -1,10 +1,19 @@
 {
 	"presets": [
 		["es2015",{"modules": false}],
+		"stage-0",
 		"react",
-		"survivejs-kanban"
+		"survivejs-kanban",
+		"stage-1"
 	],
 	"plugins": [
 		"transform-runtime"
-	]
+	],
+	"env": {
+		"start" : {
+			"presets" : [
+				"react-hmre"
+			]
+		}
+	}
 }

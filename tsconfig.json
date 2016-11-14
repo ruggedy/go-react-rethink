@@ -1,23 +1,35 @@
 {
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "jsx": "react",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "removeComments": false,
-    "sourceMap": false,
-    "inlineSourceMap": true,
-    "noEmitHelpers": true
-  },
-  "typeRoots": [
-      "../node_modules/@types"
+	"compileOnSave": false,
+	"buildOnSave": false,
+	"compilerOptions": {
+		"target": "es2015",
+		"module": "es2015",
+		"jsx": "react",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"noImplicitAny": false,
+		"removeComments": false,
+		"sourceMap": false,
+		"lib": ["es6", "es2015", "dom"],
+		"noLib": false,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"inlineSourceMap": true,
+		"noEmitHelpers": true
+	},
+	"exclude": [
+        "typings/main",
+        "typings/main.d.ts",
+        "typings/browser",
+        "typings/browser.d.ts",
+        "build",
+        "node_modules",
+        ".vscode"
     ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+	"awesomeTypescriptLoaderOptions": {
+		"useBabel": true,
+		"useCache": true
+	}
 }

@@ -13,124 +13,131 @@ const TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
 
 const PATHS = {
-    app: path.join(__dirname, 'src'),
-    build: path.join(__dirname, 'build'),
-    vendor: path.join(__dirname, 'src', 'vendor.js'),
-    style: [
-        path.join(__dirname, 'src', 'main.scss')
-    ],
-    assets: path.join(__dirname, 'src', 'assets', '**'),
-    html: path.join(__dirname, 'src', 'index.html')
+	app: path.join(__dirname, 'src'),
+	build: path.join(__dirname, 'build'),
+	vendor: path.join(__dirname, 'src', 'vendor.js'),
+	style: [
+		path.join(__dirname, 'src', 'grid.global.scss'),
+		path.join(__dirname, 'src', 'main.global.scss')
+	],
+	assets: path.join(__dirname, 'src', 'assets'),
+	html: path.join(__dirname, 'src', 'index.html'),
+	index: path.join(__dirname, 'src', 'index.tsx')
 };
 
 const common = {
-    entry: {
-        app: PATHS.app,
-        style: PATHS.style
-    },
-    resolve: {
-        modules: [PATHS.app, 'node_modules'],
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                loader: 'babel-loader',
-                query: {
-                    cacheDirectory: true
-                },
-                include: path.resolve(__dirname, "src")
-            },
-            {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-                include: path.resolve(__dirname, "src")
-            },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }
-        ]
-    },
+	entry: {
+		app: PATHS.index,
+		style: PATHS.style
+	},
+	resolve: {
+		modules: [PATHS.app, 'node_modules'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx']
+	},
+	module: {
+		loaders: [
+			{
+				test: /\.js(x?)$/,
+				loaders: [
+					'babel-loader'
 
-    plugins: [
-        new HtmlWebpackPlugin({
-            title: 'React Boiler',
-            template: PATHS.html,
-            inject: true
-        })
-    ]
+					],
+				include: path.resolve(__dirname, "src")
+			},
+			{
+				test: /\.ts(x?)$/,
+				loaders: [
+					'babel-loader',
+					'awesome-typescript-loader',
+
+					],
+				include: path.resolve(__dirname, "src")
+			},
+			{
+				test: /\.html$/,
+				loader: 'html-loader'
+			}
+		]
+	},
+
+	plugins: [
+		new HtmlWebpackPlugin({
+			title: 'React Boiler',
+			template: PATHS.html,
+			inject: true
+		})
+	]
 }
 
 var config;
 
 switch (process.env.npm_lifecycle_event) {
-    case 'build':
-    case 'stats':
-        config = merge(
-            common,
-            {
-                output: {
-                    path: PATHS.build,
-                    filename: "[name].[chunkhash].js",
-                    chunkFilename: "[chunkhash].js"
-                }
-            },
-            {
-                devtool: 'source-map'
-            },
-            parts.clean([PATHS.build]),
-            parts.setFreeVariable(
-                'process.env.NODE_ENV',
-                'production'
-            ),
-            {
-                plugins: [
-                    new webpack.optimize.DedupePlugin()
-                ]
-            },
-            parts.extractBundle({
-                name: 'vendor',
-                entries: PATHS.vendor
-            }),
-            parts.minify(),
-            parts.extractCSS(PATHS.style),
-            parts.purifyCSS([PATHS.app]),
-            parts.loadImages(PATHS.assets)
+	case 'build':
+	case 'stats':
+		config = merge(
+			common,
+			{
+				output: {
+					path: PATHS.build,
+					filename: "[name].[chunkhash].js",
+					chunkFilename: "[chunkhash].js"
+				}
+			},
+			{
+				devtool: 'source-map'
+			},
+			parts.clean([PATHS.build]),
+			parts.setFreeVariable(
+				'process.env.NODE_ENV',
+				'production'
+			),
+			{
+				plugins: [
+					new webpack.optimize.DedupePlugin()
+				]
+			},
+			parts.extractBundle({
+				name: 'vendor',
+				entries: PATHS.vendor
+			}),
+			parts.minify(),
+			parts.extractCSS(PATHS.style),
+			parts.purifyCSS([PATHS.app]),
+			parts.loadImages(PATHS.assets)
 
-        );
-        break;
+		);
+		break;
 
-    default:
-        config = merge(
-            common,
-            {
-                entry: {
-                    main: [
-                        'react-hot-loader/patch'
-                    ]
-                },
-                output: {
-                    path: PATHS.build,
-                    filename: "[name].js",
-                    sourceMapFilename: "[name].map",
-                    chunkFilename: "[id].chunk.js"
-                },
-                plugins: [
-                    new webpack.SourceMapDevToolPlugin({
-                        test: /\.jsx?$/,
-                        include: PATHS.app
-                    })
-                ]
-            },
-            parts.setupCSS(PATHS.app),
-            server.devServer({
-                host: process.env.HOST,
-                port: process.env.PORT
-            })
-        );
-        break;
+	default:
+		config = merge(
+			common,
+			{
+				output: {
+					path: PATHS.build,
+					filename: "[name].[hash].js",
+					sourceMapFilename: "[name].[hash].map",
+					chunkFilename: "[id].chunk.js"
+				},
+				plugins: [
+					new webpack.SourceMapDevToolPlugin({
+						test: /\.jsx?$/,
+						include: PATHS.app
+					}),
+					new webpack.DefinePlugin({
+						__DEV__: process.env.NODE_ENV !== 'production',
+						__TEST__: JSON.stringify(process.env.TEST || false),
+						'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+					})
+				]
+			},
+			parts.setupCSS(PATHS.app),
+			parts.loadImages(PATHS.assets),
+			server.devServer({
+				host: process.env.HOST,
+				port: process.env.PORT
+			})
+		);
+		break;
 }
 
 

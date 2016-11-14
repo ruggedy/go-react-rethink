@@ -30,13 +30,7 @@ const cssLoaders = [
 ]
 
 const imageLoaders = [
-	{
-		loader: 'file?name=[hash].[ext]'
-	},
-	{
-		loader: 'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-
-	}
+	
 ]
 
 
@@ -45,25 +39,39 @@ exports.setupCSS = function (paths) {
 		module: {
 			loaders: [
 				{
-					test: /\.scss$/,
+					test: /^((?!\.global).)*scss$/, 
 					use: [
 						{
 							loader: 'style-loader'
 						},
 						{
-							loader: 'css-loader'
+							loader: 'css-loader',
+							query: {
+								modules: true,
+								localIdentName: '[name]__[local]--[hash:base64:5]',
+								importLoaders: 1
+							}
 						},
 						{
-							loader: 'postcss-loader',
-							options: {
-								plugins: function () {
-									return [
-										require('postcss-smart-import'),
-										require('precss'),
-										require('autoprefixer')
-									]
-								}
-							}
+							loader: 'postcss-loader'
+						},
+						{
+							loader: 'sass-loader'
+						}
+					],
+					include: paths
+				},
+				{
+					test: /\.global.scss$/ , 
+					use: [
+						{
+							loader: 'style-loader'
+						},
+						{
+							loader: 'css-loader',
+						},
+						{
+							loader: 'postcss-loader'
 						},
 						{
 							loader: 'sass-loader'
@@ -165,7 +173,11 @@ exports.loadImages = function (paths) {
 			loaders: [
 				{
 					test: /\.(jpe?g|png|gif|svg)$/i,
-					loader: imageLoaders,
+					loaders: [
+						'url-loader?limit=50000&hash=sha512&digest=hex&name=[path][hash].[ext]?[hash]',
+            			'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+					],
+					include: paths
 				}
 			]
 		}

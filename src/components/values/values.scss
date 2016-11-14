@@ -1,0 +1,49 @@
+@import '../../variables';
+
+.mainContainer {
+	margin-bottom: 12rem;
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.icon-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.icon-container p,
+.partners p,
+.about p {
+	margin-top: 20px;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 1.2rem; 
+	color: $primary-color-dark;
+	font-weight: 300;
+	line-height: 1.6;
+
+}
+
+.mainContainer .icon-container span {
+	font-size: 70px !important;
+
+}
+
+.partners,
+.about {
+	margin-top: 80px;
+}
+
+.partners h2,
+.about h2{
+	color: $primary-color-dark;
+}
+
+.partners p,
+.about p {
+	width: 100%;
+}
