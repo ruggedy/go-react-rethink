@@ -27,35 +27,46 @@ const PATHS = {
 
 const common = {
 	entry: {
-		app: PATHS.index,
+		app: [
+			'babel-polyfill',
+			'react-hot-loader/patch',
+			PATHS.index
+		],
 		style: PATHS.style
 	},
 	resolve: {
-		modules: [PATHS.app, 'node_modules'],
-		extensions: ['.js', '.jsx', '.ts', '.tsx']
+		symlinks: false,
+		modules: [
+			PATHS.app,
+			path.resolve(__dirname, '..', 'node_modules'),
+			'node_modules'
+		],
+		extensions: ['.js', '.jsx', '.ts', '.tsx'],
+		plugins: [
+
+		]
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.js(x?)$/,
-				loaders: [
+				use: [
 					'babel-loader'
 
-					],
+				],
 				include: path.resolve(__dirname, "src")
 			},
 			{
 				test: /\.ts(x?)$/,
-				loaders: [
+				use: [
 					'babel-loader',
-					'awesome-typescript-loader',
-
-					],
+					'ts-loader',
+				],
 				include: path.resolve(__dirname, "src")
 			},
 			{
 				test: /\.html$/,
-				loader: 'html-loader'
+				use: 'html-loader'
 			}
 		]
 	},
@@ -79,6 +90,7 @@ switch (process.env.npm_lifecycle_event) {
 			{
 				output: {
 					path: PATHS.build,
+					publicPath: '/',
 					filename: "[name].[chunkhash].js",
 					chunkFilename: "[chunkhash].js"
 				}
@@ -93,7 +105,7 @@ switch (process.env.npm_lifecycle_event) {
 			),
 			{
 				plugins: [
-					new webpack.optimize.DedupePlugin()
+
 				]
 			},
 			parts.extractBundle({
@@ -114,6 +126,7 @@ switch (process.env.npm_lifecycle_event) {
 			{
 				output: {
 					path: PATHS.build,
+					publicPath: '/',
 					filename: "[name].[hash].js",
 					sourceMapFilename: "[name].[hash].map",
 					chunkFilename: "[id].chunk.js"

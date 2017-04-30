@@ -8,13 +8,16 @@ import {
 declare const __DEV__: boolean;
 
 import { fromJS } from 'immutable';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
+import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware } from 'react-router-redux';
 
 import thunk from 'redux-thunk';
 import logger from './logger';
 import persistState from 'redux-localstorage';
 import rootReducer from '../reducers/index';
+
+const history = createHistory();
 
 const configureStore = (initialState) => {
 	const store = createStore(
@@ -36,7 +39,7 @@ const configureStore = (initialState) => {
 
 let _getMiddleware = ():Middleware[] => {
 	let middleware = [
-		routerMiddleware(browserHistory),
+		routerMiddleware(history),
 		thunk
 	]
 

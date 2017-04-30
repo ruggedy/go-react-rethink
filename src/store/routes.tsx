@@ -1,11 +1,9 @@
 import React from 'react';
 
-import { IndexRoute, Route} from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 
 import App from '../containers/app';
 
 export default (
-	<Route path="/" component={App} >
-		
-	</Route>
+	<Route exact path="/" component={App} ></Route>
 )

@@ -37,7 +37,7 @@ const imageLoaders = [
 exports.setupCSS = function (paths) {
 	return {
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /^((?!\.global).)*scss$/, 
 					use: [
@@ -139,13 +139,13 @@ exports.clean = function (path) {
 exports.extractCSS = function (paths) {
 	return {
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.scss$/,
-					loader: ExtractTextPlugin.extract({
-						fallbackLoader: 'style-loader',
-						loader: cssLoaders,
-						include: paths
+					use: ExtractTextPlugin.extract({
+						use: cssLoaders,
+						fallback: "style-loader",
+						// include: paths
 					})
 				}
 			]
@@ -170,12 +170,12 @@ exports.purifyCSS = function (paths) {
 exports.loadImages = function (paths) {
 	return {
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.(jpe?g|png|gif|svg)$/i,
-					loaders: [
+					use: [
 						'url-loader?limit=50000&hash=sha512&digest=hex&name=[path][hash].[ext]?[hash]',
-            			'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+            			'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
 					],
 					include: paths
 				}

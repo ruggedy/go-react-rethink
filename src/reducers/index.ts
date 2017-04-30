@@ -6,7 +6,7 @@ import session from './dummy';
 
 const rootReducer = combineReducers({
 	session, 
-	routing: routerReducer,
+	router: routerReducer,
 	form: formReducer
 })
 

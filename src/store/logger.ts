@@ -1,4 +1,4 @@
-import createLogger from  'redux-logger';
+import {createLogger} from  'redux-logger';
 import immutableToJs from '../utils/immutable-to-js';
 
 const logger = createLogger({

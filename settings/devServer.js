@@ -21,7 +21,6 @@ exports.devServer = function (options) {
 				aggregateTimeout: 300,
 				poll: 1000
 			},
-			outputPath: PATHS.build + "/",
 			inline: true,
 			hot: true,
 			stats: {
