@@ -17,12 +17,11 @@ const PATHS = {
 	build: path.join(__dirname, 'build'),
 	vendor: path.join(__dirname, 'src', 'vendor.js'),
 	style: [
-		path.join(__dirname, 'src', 'grid.global.scss'),
-		path.join(__dirname, 'src', 'main.global.scss')
+
 	],
 	assets: path.join(__dirname, 'src', 'assets'),
 	html: path.join(__dirname, 'src', 'index.html'),
-	index: path.join(__dirname, 'src', 'index.tsx')
+	index: path.join(__dirname, 'src', 'index.jsx')
 };
 
 const common = {
